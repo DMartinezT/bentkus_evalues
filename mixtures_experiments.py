@@ -2,6 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from scipy.stats import norm
 from scipy.optimize import minimize_scalar
+from tqdm import tqdm
 import pandas as pd
 
 def phi(x):
@@ -112,6 +113,9 @@ def experiment_posthoc():
 
 # --- Experiment 2: Multiple Testing ---
 def experiment_multiple_testing():
+
+    np.random.seed(42)
+
     K = 100
     delta_star = 0.1
     alpha = 2
@@ -150,7 +154,8 @@ def experiment_multiple_testing():
         return rejections
 
     proportions = [0, 0.01, 0.05, 0.10, 0.20]
-    num_sims = 500
+    proportions = [0.01, 0.05, 0.10, 0.20]
+    num_sims = 1000
     mu = 3.5 # Signal strength
     
     results = []
@@ -161,7 +166,7 @@ def experiment_multiple_testing():
         rejs_b = []
         rejs_e = []
         
-        for _ in range(num_sims):
+        for _ in tqdm(range(num_sims)):
             z_null = np.random.normal(0, 1, num_null)
             z_non_null = np.random.normal(mu, 1, num_non_null)
             z = np.concatenate([z_null, z_non_null])
