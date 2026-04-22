@@ -72,6 +72,10 @@ def find_optimal_lambd_exponential(delta):
 
 # --- Experiment 1: Post-hoc Inference ---
 def experiment_posthoc():
+
+    np.random.seed(42)
+
+
     alpha = 2
     deltas_opt = [0.1, 0.05, 0.01]
     
@@ -98,11 +102,11 @@ def experiment_posthoc():
         delta_b = 1.0 / eb if eb > 0 else np.inf
         delta_e = 1.0 / ee if ee > 0 else np.inf
         results.append({
-            "Z": z,
-            "Bentkus E-value": eb,
-            "Exp E-value": ee,
-            "Bentkus post-hoc delta": delta_b,
-            "Exp post-hoc delta": delta_e
+            "$Z$": z,
+            "$E_n^{\Text{B}}(Z; \pi)$": eb,
+            "$E_n^{\Text{IWR}}(Z; \pi)$": ee,
+            "B post-hoc $\delta$": delta_b,
+            "IWR post-hoc $\delta$": delta_e
         })
     
     df = pd.DataFrame(results)
@@ -179,8 +183,8 @@ def experiment_multiple_testing():
             
         results.append({
             "Prop. Non-Null": p,
-            "Bentkus Avg Rejections": np.mean(rejs_b),
-            "Exp Avg Rejections": np.mean(rejs_e)
+            "B Avg Reject.": np.mean(rejs_b),
+            "IWR Avg Reject.": np.mean(rejs_e)
         })
         
     df = pd.DataFrame(results)
@@ -190,7 +194,9 @@ def experiment_multiple_testing():
 
 if __name__ == "__main__":
     df_posthoc = experiment_posthoc()
-    df_posthoc.round(4).to_latex("tables/experiment_posthoc.tex", index=False)
+    df_posthoc.to_latex("tables/experiment_posthoc.tex", index=False, float_format="%.3f")
+    
     
     df_multiple = experiment_multiple_testing()
-    df_multiple.round(4).to_latex("tables/experiment_multiple_testing.tex", index=False)
+    # df_multiple.to_latex("tables/experiment_multiple_testing.tex", index=False, float_format="%.2f")
+    df_multiple.set_index("Prop. Non-Null").T.to_latex("tables/experiment_multiple_testing.tex", float_format="%.2f")   
