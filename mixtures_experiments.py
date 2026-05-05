@@ -37,9 +37,6 @@ def I_k(k, x):
     # E[(Z-x)_+^k] = J_k(x) * G(x)
     return J_k(k, x) * G(x)
 
-def V_alpha(alpha, x):
-    # V_alpha(x) = (alpha-1) * J_{alpha-2}(x) / J_{alpha-1}(x)
-    return (alpha - 1) * J_k(alpha - 2, x) / J_k(alpha - 1, x)
 
 def bentkus_e_value(z, lambd, alpha=2):
     # Indicator e-value for alpha = 0 (B0)
